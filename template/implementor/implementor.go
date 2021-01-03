@@ -117,12 +117,15 @@ func createParametersTemplates(ps []models.Parameter) ([]string, []string, []str
 
 func appendIfMissing(slice []string, vals ...string) []string {
 	for _, val := range vals {
+		isDuplicate := false
 		for _, ele := range slice {
 			if ele == val {
-				continue
+				isDuplicate = true
 			}
 		}
-		slice = append(slice, val)
+		if !isDuplicate {
+			slice = append(slice, val)
+		}
 	}
 
 	return slice
