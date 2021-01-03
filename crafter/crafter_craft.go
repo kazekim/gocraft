@@ -3,7 +3,7 @@ package crafter
 import (
 	"github.com/kazekim/gocraft/gcconverter"
 	"github.com/kazekim/gocraft/models"
-	gstemplate "github.com/kazekim/gocraft/template"
+	"github.com/kazekim/gocraft/template/gomod"
 	"github.com/spf13/viper"
 )
 
@@ -30,7 +30,7 @@ func (c *defaultCrafter) Craft() error {
 	}
 
 	if setting.IsEnableGoModules {
-		gmt := gstemplate.NewGoModTemplate(setting.PackagePath, setting.ExternalTypes)
+		gmt := gomod.NewTemplate(setting.PackagePath, setting.ExternalTypes)
 		err := gmt.GenerateFile(c.fileMgr)
 		if err != nil {
 			return err
