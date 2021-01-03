@@ -7,6 +7,17 @@ type Implementor struct {
 	Methods    []Method    `json:"methods" mapstructure:"methods"`
 }
 
+func (i *Implementor) AllParameters() []Parameter {
+	var params []Parameter
+	for _, a := range i.Attributes {
+		if a.IsParameter {
+			params = append(params, a.Parameter())
+		}
+	}
+	params = append(params, i.Parameters...)
+	return params
+}
+
 func (i *Implementor) AllMethods() []Method {
 
 	var ms []Method

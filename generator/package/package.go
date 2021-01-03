@@ -65,6 +65,7 @@ func (g *packageGenerator) GenerateFile(fileMgr *filemanager.FileManager) {
 			ms = append(ms, impl.AllMethods()...)
 
 			it := implementortemplate.NewTemplate(g.PackageName(), intf.Name, *impl, path)
+			it.SetNewFuncName(intf.Name)
 			it.GenerateFile(fileMgr)
 		}
 

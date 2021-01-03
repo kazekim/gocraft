@@ -10,4 +10,10 @@ type {{.ImplementorName}} struct { {{range $attr := .Attributes}}
 	{{ $attr }}
 {{- end }}
 }
+
+func New{{.NewFuncName}}({{.NewFuncParameters}}) {{.InterfaceName}} {
+	return &{{.ImplementorName}}{ {{range $val := .VariableParameters}}
+		{{$val}},{{ end }}
+	}
+}
 `

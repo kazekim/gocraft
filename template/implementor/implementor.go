@@ -5,16 +5,21 @@ import (
 	"github.com/kazekim/gocraft/converter/type"
 	"github.com/kazekim/gocraft/filemanager"
 	"github.com/kazekim/gocraft/models"
+	"strings"
 	"text/template"
 )
 
 type Template struct {
-	path            string
-	PackageName     string
-	ImplementorName string
-	Imports         []string
-	Attributes      []string
-	Methods         []MethodTemplate
+	path               string
+	PackageName        string
+	InterfaceName      string
+	ImplementorName    string
+	NewFuncName        string
+	Imports            []string
+	Attributes         []string
+	NewFuncParameters  string
+	VariableParameters []string
+	Methods            []MethodTemplate
 }
 
 type MethodTemplate struct {
@@ -27,21 +32,36 @@ type MethodTemplate struct {
 
 func NewTemplate(pkgName, interfaceName string, impl models.Implementor, path string) *Template {
 
-	implName := strcase.ToCamel(impl.Name) + strcase.ToCamel(interfaceName)
+	intfName := strcase.ToCamel(interfaceName)
+	implName := strcase.ToLowerCamel(impl.Name) + intfName
+	newFuncName := implName
 
 	var imports []string
 
 	attrs, ips := createAttributeTemplates(impl.Attributes)
 	imports = appendIfMissing(imports, ips...)
+
+	newFuncParams, variableParams, ips := createParametersTemplates(impl.AllParameters())
+	nfpStr := strings.Join(newFuncParams, ",")
+	imports = appendIfMissing(imports, ips...)
+
 	//ms := convertMethodTemplate(methods)
 
 	return &Template{
-		PackageName:     pkgName,
-		ImplementorName: implName,
-		Attributes:      attrs,
-		Imports:         imports,
-		path:            path,
+		PackageName:        pkgName,
+		InterfaceName:      intfName,
+		ImplementorName:    implName,
+		NewFuncName:        newFuncName,
+		NewFuncParameters:  nfpStr,
+		VariableParameters: variableParams,
+		Attributes:         attrs,
+		Imports:            imports,
+		path:               path,
 	}
+}
+
+func (t *Template) SetNewFuncName(name string) {
+	t.NewFuncName = strcase.ToCamel(name)
 }
 
 func (t *Template) GenerateFile(fileMgr *filemanager.FileManager) {
@@ -73,6 +93,26 @@ func createAttributeTemplates(as []models.Attribute) ([]string, []string) {
 		attrs = append(attrs, attr)
 	}
 	return attrs, ips
+}
+
+func createParametersTemplates(ps []models.Parameter) ([]string, []string, []string) {
+	var params []string
+	var vParams []string
+	var ips []string
+
+	for _, p := range ps {
+		param := p.Name + " "
+		vParam := p.Name + ": " + p.Name
+
+		t, ip := typeconverter.FullParameterTypeNameWithImportPath(p)
+		param += t
+		if ip != "" {
+			ips = appendIfMissing(ips, ip)
+		}
+		params = append(params, param)
+		vParams = append(vParams, vParam)
+	}
+	return params, vParams, ips
 }
 
 func appendIfMissing(slice []string, vals ...string) []string {

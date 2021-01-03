@@ -20,6 +20,15 @@ type Attribute struct {
 	IsInterfaceMethod *bool  `json:"is_interface_method" mapstructure:"is_interface_method"`
 }
 
+func (a *Attribute) Parameter() Parameter {
+	var p Parameter
+	err := mapstructure.Decode(a, &p)
+	if err != nil {
+		panic(err)
+	}
+	return p
+}
+
 func (a *Attribute) AllMethods() []Method {
 
 	var methods []Method
