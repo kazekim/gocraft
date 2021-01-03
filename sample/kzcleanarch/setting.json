@@ -1,7 +1,8 @@
 {
-  "prefix": "KZ",
-  "sub_prefix": "CleanArch",
-  "enable_go_modules": true,
+  "package_name": "kzcleanarch",
+  "package_path": "github.com/kazekim/gocraft/sample/kzcleanarch",
+  "prefix": "kz",
+  "is_enable_go_modules": true,
   "architecture": "clean.v1",
   "structure": {
     "is_endpoints_use_prefix": true,
@@ -42,7 +43,7 @@
               "is_pointer": true
             },
             {
-              "name": "default",
+              "name": "app",
               "is_parameter": true,
               "is_use_case": true
             },
@@ -59,7 +60,7 @@
     },
     "use_cases": [
       {
-        "name": "kz",
+        "name": "app",
         "implementors": [
           {
             "name": "default",
@@ -71,7 +72,7 @@
                 "is_parameter": true
               },
               {
-                "name": "db",
+                "name": "app_db",
                 "is_parameter": true,
                 "is_repository": true
               }
@@ -98,8 +99,8 @@
     ],
     "repositories": [
       {
-        "name": "kzdb",
-        "is_name_upper_case": true,
+        "name": "AppDB",
+        "is_not_convert_case": true,
         "implementors": [
           {
             "name": "default",
@@ -138,7 +139,8 @@
     ],
     "packages": [
       {
-        "name": "kzdb",
+        "name": "db",
+        "is_add_prefix": "is_add_prefix",
         "path": "pkg/",
         "is_enable_versioning": true,
         "interfaces": [
@@ -157,7 +159,8 @@
         ]
       },
       {
-        "name": "kzerror",
+        "name": "error",
+        "is_add_prefix": "is_add_prefix",
         "path": "pkg/",
         "is_enable_versioning": false,
         "enums": [
@@ -170,6 +173,7 @@
           {
             "name": "error",
             "implementors": {
+              "name": "default",
               "attributes": [
                 {
                   "name": "code",
@@ -222,20 +226,22 @@
           ]
         }
       }
-    ],
-    "external_types": [
-      {
-        "name": "gorm.v2",
-        "type": "DB",
-        "package_name": "gorm",
-        "git_path":"gorm.io/gorm"
-      },
-      {
-        "name": "echo.v4",
-        "type": "Echo",
-        "package_name": "echo",
-        "git_path":"github.com/labstack/echo/v4"
-      }
     ]
-  }
+  },
+  "external_types": [
+    {
+      "name": "gorm.v2",
+      "type": "DB",
+      "package_name": "gorm",
+      "git_path":"gorm.io/gorm",
+      "version": "v1.20.9"
+    },
+    {
+      "name": "echo.v4",
+      "type": "Echo",
+      "package_name": "echo",
+      "git_path": "github.com/labstack/echo/v4",
+      "version": "v4.1.17"
+    }
+  ]
 }

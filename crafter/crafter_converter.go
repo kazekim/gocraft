@@ -9,17 +9,17 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-func (c *defaultCrafter) convertProjectArchitecture(arch models.ProjectArchitecture, input interface{}) (gcstructure.Structure, error) {
+func (c *defaultCrafter) convertProjectArchitecture(s models.GoCraft) (gcstructure.Structure, error) {
 
-	switch arch {
+	switch s.Architecture {
 	case models.ProjectArchitectureCleanV1:
 		var m cleanarchmodels.CleanArchitecture
-		err := mapstructure.Decode(input, &m)
+		err := mapstructure.Decode(s.Structure, &m)
 		if err != nil {
 			return nil, err
 		}
-		return cleanarch.NewStructureV1(m), nil
+		return cleanarch.NewStructureV1(m, s.Prefix, s.PackageName, s.ExternalTypes), nil
 	default:
-		return nil, errors.New("Invalid Architecture")
+		return nil, errors.New("invalid architecture")
 	}
 }

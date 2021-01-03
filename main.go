@@ -7,7 +7,7 @@ import (
 func main() {
 
 	cfgName := "setting"
-	cfgPath := "sample/cleanarch/"
+	cfgPath := "sample/kzcleanarch/"
 
 	c := crafter.New(cfgName, cfgPath)
 	err := c.Craft()
