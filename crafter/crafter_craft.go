@@ -2,6 +2,7 @@ package crafter
 
 import (
 	"github.com/kazekim/gocraft/models"
+	gstemplate "github.com/kazekim/gocraft/template"
 	"github.com/spf13/viper"
 )
 
@@ -22,12 +23,23 @@ func (c *defaultCrafter) Craft() error {
 		return err
 	}
 
-	structure, err := c.convertProjectArchitecture(setting.Architecture, setting.Structure)
+	structure, err := c.convertProjectArchitecture(setting)
 	if err != nil {
 		return err
 	}
 
-	structure.Build()
+	if setting.IsEnableGoModules {
+		gmt := gstemplate.NewGoModTemplate("cleanarch", "github.com/kazekim/gocraft/sample/", setting.ExternalTypes)
+		err := gmt.GenerateFile("sample/cleanarch")
+		if err != nil {
+			return err
+		}
+	}
+
+	err = structure.Craft()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

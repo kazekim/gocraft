@@ -1,5 +1,5 @@
 package gcstructure
 
 type Structure interface {
-	Build()
+	Craft() error
 }
