@@ -26,10 +26,15 @@ func NewStructureV1(model cleanarchmodels.CleanArchitecture, prefix, pkgName str
 
 func (s *CleanArchitectureStructureV1) Craft(fileMgr *filemanager.FileManager) error {
 
-	fileMgr.NewDirectory(gcconstants.DirectoryNameEndPoints)
-	fileMgr.NewDirectory(gcconstants.DirectoryNameUseCases)
-	fileMgr.NewDirectory(gcconstants.DirectoryNameRepositories)
-	fileMgr.NewDirectory(gcconstants.DirectoryNameEntities)
+	appPath := gcconstants.DirectoryNameApplciation
+	fileMgr.NewDirectory(appPath)
+	fileMgr.NewSubDirectory(appPath, gcconstants.DirectoryNameEndPoints)
+	fileMgr.NewSubDirectory(appPath, gcconstants.DirectoryNameUseCases)
+	fileMgr.NewSubDirectory(appPath, gcconstants.DirectoryNameRepositories)
+	fileMgr.NewSubDirectory(appPath, gcconstants.DirectoryNameEntities)
+	fileMgr.NewDirectory(gcconstants.DirectoryNamePackages)
+	fileMgr.NewDirectory(gcconstants.DirectoryNameInternal)
+	fileMgr.NewDirectory(gcconstants.DirectoryNameCommand)
 
 	return nil
 }

@@ -3,30 +3,51 @@ package filemanager
 import (
 	gcutils "github.com/kazekim/gocraft/utils"
 	"os"
+	"strings"
 )
 
 type FileManager struct {
-	basePath      string
-	fileList      []string
-	directoryList []string
+	basePath       string
+	filePaths      []string
+	directoryPaths []string
+	directoryMap   map[string]string
 }
 
 func New(basePath string) *FileManager {
 	return &FileManager{
-		basePath:      basePath,
-		fileList:      []string{},
-		directoryList: []string{},
+		basePath:       basePath,
+		filePaths:      []string{},
+		directoryPaths: []string{},
+		directoryMap:   map[string]string{},
 	}
 }
 
-func (fm *FileManager) NewDirectory(directoryName string) {
+func (fm *FileManager) NewDirectory(names ...string) {
 
-	err := gcutils.CreateDirectory(fm.basePath, directoryName)
+	dirName := strings.Join(names, "/")
+
+	name := names[len(names)-1]
+
+	err := gcutils.CreateDirectory(fm.basePath, dirName)
 	if err != nil {
 		fm.DeleteAllFiles()
 		panic(err)
 	}
-	fm.directoryList = append(fm.directoryList, fm.basePath+directoryName)
+	fm.directoryPaths = append(fm.directoryPaths, fm.basePath+dirName)
+	fm.directoryMap[name] = dirName
+}
+
+func (fm *FileManager) NewSubDirectory(parentDir, dirName string) {
+
+	isNotExist, err := gcutils.IsDirectoryNotExist(fm.basePath, parentDir)
+	if err != nil {
+		panic(err)
+	}
+
+	if isNotExist {
+		fm.NewDirectory(parentDir)
+	}
+	fm.NewDirectory(parentDir, dirName)
 }
 
 func (fm *FileManager) NewFile(fileName string) *os.File {
@@ -35,17 +56,17 @@ func (fm *FileManager) NewFile(fileName string) *os.File {
 		fm.DeleteAllFiles()
 		panic(err)
 	}
-	fm.fileList = append(fm.fileList, fm.basePath+fileName)
+	fm.filePaths = append(fm.filePaths, fm.basePath+fileName)
 	return f
 }
 
 func (fm *FileManager) DeleteAllFiles() {
 
-	for _, f := range fm.fileList {
+	for _, f := range fm.filePaths {
 		_ = os.Remove(f)
 	}
 
-	for _, d := range fm.directoryList {
+	for _, d := range fm.directoryPaths {
 		_ = os.RemoveAll(d)
 	}
 }
