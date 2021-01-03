@@ -21,7 +21,11 @@ func NewPackageGenerator(pkg models.Package, prefix string) Generator {
 }
 
 func (g *packageGenerator) PackageName() string {
-	return g.prefix + g.pkg.Name
+	pkgName := g.pkg.Name
+	if g.pkg.IsAddPrefix {
+		pkgName = g.prefix + pkgName
+	}
+	return pkgName
 }
 
 func (g *packageGenerator) GenerateFile(fileMgr *filemanager.FileManager) {
@@ -40,16 +44,26 @@ func (g *packageGenerator) GenerateFile(fileMgr *filemanager.FileManager) {
 	default:
 		panic("package type not defined")
 	}
-	path := pd + "/" + g.PackageName()
-	isNotExist, err := gcutils.IsPathNotExist(fileMgr.Path() + path)
-	if err != nil {
-		panic(err)
+
+	path := g.selectPathOrCreateDirectoryIfNotExist(fileMgr, pd, g.PackageName())
+	if g.pkg.IsEnableVersioning {
+		path = g.selectPathOrCreateDirectoryIfNotExist(fileMgr, path, gcconstants.Version1)
 	}
-	if isNotExist {
-		fileMgr.NewSubDirectory(pd, g.PackageName())
-	}
+
 	for _, enum := range g.pkg.Enums {
 		et := enumtemplate.NewTemplate(g.PackageName(), enum.Name, enum.Type, path)
 		et.GenerateFile(fileMgr)
 	}
+}
+
+func (g *packageGenerator) selectPathOrCreateDirectoryIfNotExist(fileMgr *filemanager.FileManager, path, directory string) string {
+	fullPath := path + "/" + directory
+	isNotExist, err := gcutils.IsPathNotExist(fileMgr.Path() + fullPath)
+	if err != nil {
+		panic(err)
+	}
+	if isNotExist {
+		fileMgr.NewSubDirectory(path, directory)
+	}
+	return fullPath
 }

@@ -142,7 +142,6 @@
         "name": "db",
         "type": "internal",
         "is_add_prefix": true,
-        "path": "pkg/",
         "is_enable_versioning": true,
         "interfaces": [
           {
@@ -165,7 +164,6 @@
         "name": "error",
         "type": "internal",
         "is_add_prefix": true,
-        "path": "pkg/",
         "is_enable_versioning": false,
         "enums": [
           {

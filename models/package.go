@@ -4,7 +4,6 @@ type Package struct {
 	Name               string      `json:"name" mapstructure:"name"`
 	Type               PackageType `json:"type" mapstructure:"type"`
 	CustomPath         string      `json:"custom_path" mapstructure:"custom_path"`
-	Path               string      `json:"path" mapstructure:"path"`
 	IsAddPrefix        bool        `json:"is_add_prefix" mapstructure:"is_add_prefix"`
 	IsEnableVersioning bool        `json:"is_enable_versioning" mapstructure:"is_enable_versioning"`
 	Interfaces         []Interface `json:"interfaces" mapstructure:"interfaces"`
