@@ -1,7 +1,7 @@
 {
+  "package_name": "kzcleanarch",
+  "package_path": "github.com/kazekim/gocraft/sample/kzcleanarch",
   "prefix": "kz",
-  "package_name": "cleanarch",
-  "package_path": "github.com/kazekim/gocraft/sample/cleanarch",
   "is_enable_go_modules": true,
   "architecture": "clean.v1",
   "structure": {

@@ -1,4 +1,4 @@
-module github.com/kazekim/gocraft/sample/cleanarch
+module github.com/kazekim/gocraft/sample/kzcleanarch
 
 go 1.15
 

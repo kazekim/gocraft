@@ -30,7 +30,7 @@ func (c *defaultCrafter) Craft() error {
 
 	if setting.IsEnableGoModules {
 		gmt := gstemplate.NewGoModTemplate(setting.PackagePath, setting.ExternalTypes)
-		err := gmt.GenerateFile("sample/cleanarch")
+		err := gmt.GenerateFile(c.cfgPath)
 		if err != nil {
 			return err
 		}
