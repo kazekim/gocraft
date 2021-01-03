@@ -4,6 +4,7 @@ import (
 	"github.com/kazekim/gocraft/architecture/cleanarch/v1/models/v1"
 	gcconstants "github.com/kazekim/gocraft/constants"
 	"github.com/kazekim/gocraft/filemanager"
+	gcgenerator "github.com/kazekim/gocraft/generator"
 	"github.com/kazekim/gocraft/models"
 	gcstructure "github.com/kazekim/gocraft/structure"
 	"github.com/mitchellh/mapstructure"
@@ -21,7 +22,7 @@ func NewStructure(m interface{}, prefix, pkgName string, externalTypes []models.
 	var model cleanarchmodels.CleanArchitecture
 	err := mapstructure.Decode(m, &model)
 	if err != nil {
-		return nil
+		panic(err)
 	}
 
 	return &Structure{
@@ -32,7 +33,7 @@ func NewStructure(m interface{}, prefix, pkgName string, externalTypes []models.
 	}
 }
 
-func (s *Structure) Craft(fileMgr *filemanager.FileManager) error {
+func (s *Structure) Craft(fileMgr *filemanager.FileManager) {
 
 	appPath := gcconstants.DirectoryNameApplciation
 	fileMgr.NewDirectory(appPath)
@@ -44,5 +45,8 @@ func (s *Structure) Craft(fileMgr *filemanager.FileManager) error {
 	fileMgr.NewDirectory(gcconstants.DirectoryNameInternal)
 	fileMgr.NewDirectory(gcconstants.DirectoryNameCommand)
 
-	return nil
+	for _, p := range s.model.Packages {
+		g := gcgenerator.NewPackageGenerator(p, s.prefix)
+		g.GenerateFile(fileMgr)
+	}
 }

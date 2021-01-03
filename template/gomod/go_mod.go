@@ -51,7 +51,7 @@ func NewTemplate(pkgPath string, exTypes []models.ExternalType) *Template {
 	}
 }
 
-func (t *Template) GenerateFile(fileMgr *filemanager.FileManager) error {
+func (t *Template) GenerateFile(fileMgr *filemanager.FileManager) {
 
 	f := fileMgr.NewFile(gcconstants.FileNameGoMod)
 	defer f.Close()
@@ -59,5 +59,7 @@ func (t *Template) GenerateFile(fileMgr *filemanager.FileManager) error {
 	gmTemplate := template.Must(template.New("").Parse(templateStructure))
 
 	err := gmTemplate.Execute(f, t)
-	return err
+	if err != nil {
+		panic(err)
+	}
 }

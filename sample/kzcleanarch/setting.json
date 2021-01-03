@@ -140,27 +140,31 @@
     "packages": [
       {
         "name": "db",
-        "is_add_prefix": "is_add_prefix",
+        "type": "internal",
+        "is_add_prefix": true,
         "path": "pkg/",
         "is_enable_versioning": true,
         "interfaces": [
           {
             "name": "client",
-            "implementors": {
-              "name": "default",
-              "attributes": [
-                {
-                  "name": "db",
-                  "template_type": "gorm.v2"
-                }
-              ]
-            }
+            "implementors": [
+              {
+                "name": "default",
+                "attributes": [
+                  {
+                    "name": "db",
+                    "template_type": "gorm.v2"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       {
         "name": "error",
-        "is_add_prefix": "is_add_prefix",
+        "type": "internal",
+        "is_add_prefix": true,
         "path": "pkg/",
         "is_enable_versioning": false,
         "enums": [
@@ -172,29 +176,31 @@
         "interfaces": [
           {
             "name": "error",
-            "implementors": {
-              "name": "default",
-              "attributes": [
-                {
-                  "name": "code",
-                  "type": "ErrorCode"
-                },
-                {
-                  "message": "message",
-                  "type": "string"
-                }
-              ],
-              "parameters": [
-                {
-                  "name": "code",
-                  "type": "ErrorCode"
-                },
-                {
-                  "message": "message",
-                  "type": "string"
-                }
-              ]
-            }
+            "implementors": [
+              {
+                "name": "default",
+                "attributes": [
+                  {
+                    "name": "code",
+                    "type": "ErrorCode"
+                  },
+                  {
+                    "message": "message",
+                    "type": "string"
+                  }
+                ],
+                "parameters": [
+                  {
+                    "name": "code",
+                    "type": "ErrorCode"
+                  },
+                  {
+                    "message": "message",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
           }
         ]
       }

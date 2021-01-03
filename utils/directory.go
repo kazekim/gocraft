@@ -29,3 +29,14 @@ func IsDirectoryNotExist(path, directoryName string) (bool, error) {
 	}
 	return false, nil
 }
+
+func IsPathNotExist(fullPath string) (bool, error) {
+	if _, err := os.Stat(fullPath); err != nil {
+		if os.IsNotExist(err) {
+			return true, nil
+		} else {
+			return false, err
+		}
+	}
+	return false, nil
+}

@@ -1,19 +1,29 @@
 package crafter
 
 import (
-	"github.com/kazekim/gocraft/gcconverter"
+	"errors"
+	"fmt"
+	gcconverter "github.com/kazekim/gocraft/converter"
 	"github.com/kazekim/gocraft/models"
 	"github.com/kazekim/gocraft/template/gomod"
 	"github.com/spf13/viper"
 )
 
-func (c *defaultCrafter) Craft() error {
+func (c *defaultCrafter) Craft() (err error) {
+
+	defer func() {
+
+		if e := recover(); e != nil {
+			c.fileMgr.DeleteAllFiles()
+			err = errors.New(fmt.Sprintf("%v", e))
+		}
+	}()
 
 	viper.SetConfigName(c.cfgName)
 	viper.SetConfigType("json")
 	viper.AddConfigPath(c.cfgPath)
 
-	err := viper.ReadInConfig()
+	err = viper.ReadInConfig()
 	if err != nil {
 		return err
 	}
@@ -21,26 +31,16 @@ func (c *defaultCrafter) Craft() error {
 	var setting models.GoCraft
 	err = viper.Unmarshal(&setting)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
-	structure, err := gcconverter.ConvertProjectArchitecture(setting)
-	if err != nil {
-		return err
-	}
-
+	structure := gcconverter.ConvertProjectArchitecture(setting)
 	if setting.IsEnableGoModules {
 		gmt := gomod.NewTemplate(setting.PackagePath, setting.ExternalTypes)
-		err := gmt.GenerateFile(c.fileMgr)
-		if err != nil {
-			return err
-		}
+		gmt.GenerateFile(c.fileMgr)
 	}
 
-	err = structure.Craft(c.fileMgr)
-	if err != nil {
-		return err
-	}
+	structure.Craft(c.fileMgr)
 
 	return nil
 }

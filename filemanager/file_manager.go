@@ -50,16 +50,6 @@ func (fm *FileManager) NewSubDirectory(parentDir, dirName string) {
 	fm.NewDirectory(parentDir, dirName)
 }
 
-func (fm *FileManager) NewFile(fileName string) *os.File {
-	f, err := os.Create(fm.Path() + "go.mod")
-	if err != nil {
-		fm.DeleteAllFiles()
-		panic(err)
-	}
-	fm.filePaths = append(fm.filePaths, fm.basePath+fileName)
-	return f
-}
-
 func (fm *FileManager) DeleteAllFiles() {
 
 	for _, f := range fm.filePaths {

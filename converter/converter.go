@@ -8,12 +8,12 @@ import (
 	"github.com/kazekim/gocraft/structure"
 )
 
-func ConvertProjectArchitecture(s models.GoCraft) (gcstructure.Structure, error) {
+func ConvertProjectArchitecture(s models.GoCraft) gcstructure.Structure {
 
 	switch s.Architecture {
 	case architecture.CleanArchitectureV1:
-		return cleanarchv1.NewStructure(s.Structure, s.Prefix, s.PackageName, s.ExternalTypes), nil
+		return cleanarchv1.NewStructure(s.Structure, s.Prefix, s.PackageName, s.ExternalTypes)
 	default:
-		return nil, errors.New("invalid architecture")
+		panic(errors.New("invalid architecture"))
 	}
 }
