@@ -58,7 +58,13 @@ func (g *packageGenerator) GenerateFile(fileMgr *filemanager.FileManager) {
 	}
 
 	for _, intf := range g.pkg.Interfaces {
-		et := interfacetemplate.NewTemplate(g.PackageName(), intf.Name, path)
+
+		var ms []models.Method
+		if impl := intf.DefaultImplementor; impl != nil {
+			ms = append(ms, impl.AllMethods()...)
+		}
+
+		et := interfacetemplate.NewTemplate(g.PackageName(), intf.Name, path, ms)
 		et.GenerateFile(fileMgr)
 	}
 }

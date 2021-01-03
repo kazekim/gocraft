@@ -146,17 +146,16 @@
         "interfaces": [
           {
             "name": "client",
-            "implementors": [
-              {
-                "name": "default",
-                "attributes": [
-                  {
-                    "name": "db",
-                    "template_type": "gorm.v2"
-                  }
-                ]
-              }
-            ]
+            "default_implementor": {
+              "name": "default",
+              "attributes": [
+                {
+                  "name": "db",
+                  "template_type": "gorm.v2"
+                }
+              ]
+            },
+            "implementors": []
           }
         ]
       },
@@ -174,31 +173,25 @@
         "interfaces": [
           {
             "name": "error",
-            "implementors": [
-              {
-                "name": "default",
-                "attributes": [
-                  {
-                    "name": "code",
-                    "type": "ErrorCode"
-                  },
-                  {
-                    "message": "message",
-                    "type": "string"
-                  }
-                ],
-                "parameters": [
-                  {
-                    "name": "code",
-                    "type": "ErrorCode"
-                  },
-                  {
-                    "message": "message",
-                    "type": "string"
-                  }
-                ]
-              }
-            ]
+            "default_implementor": {
+              "name": "default",
+              "attributes": [
+                {
+                  "name": "code",
+                  "type": "ErrorCode",
+                  "is_parameter": true,
+                  "is_add_getter": true
+                },
+                {
+                  "name": "message",
+                  "type": "string",
+                  "is_parameter": true,
+                  "is_add_getter": true
+                }
+              ],
+              "parameters": []
+            },
+            "implementors": []
           }
         ]
       }
