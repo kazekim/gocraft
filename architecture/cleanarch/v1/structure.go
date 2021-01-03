@@ -1,22 +1,30 @@
-package cleanarch
+package cleanarchv1
 
 import (
-	"github.com/kazekim/gocraft/cleanarch/models/v1"
+	"github.com/kazekim/gocraft/architecture/cleanarch/v1/models/v1"
 	gcconstants "github.com/kazekim/gocraft/constants"
 	"github.com/kazekim/gocraft/filemanager"
 	"github.com/kazekim/gocraft/models"
 	gcstructure "github.com/kazekim/gocraft/structure"
+	"github.com/mitchellh/mapstructure"
 )
 
-type CleanArchitectureStructureV1 struct {
+type Structure struct {
 	model         cleanarchmodels.CleanArchitecture
 	prefix        string
 	pkgName       string
 	externalTypes []models.ExternalType
 }
 
-func NewStructureV1(model cleanarchmodels.CleanArchitecture, prefix, pkgName string, externalTypes []models.ExternalType) gcstructure.Structure {
-	return &CleanArchitectureStructureV1{
+func NewStructure(m interface{}, prefix, pkgName string, externalTypes []models.ExternalType) gcstructure.Structure {
+
+	var model cleanarchmodels.CleanArchitecture
+	err := mapstructure.Decode(m, &model)
+	if err != nil {
+		return nil
+	}
+
+	return &Structure{
 		model:         model,
 		prefix:        prefix,
 		pkgName:       pkgName,
@@ -24,7 +32,7 @@ func NewStructureV1(model cleanarchmodels.CleanArchitecture, prefix, pkgName str
 	}
 }
 
-func (s *CleanArchitectureStructureV1) Craft(fileMgr *filemanager.FileManager) error {
+func (s *Structure) Craft(fileMgr *filemanager.FileManager) error {
 
 	appPath := gcconstants.DirectoryNameApplciation
 	fileMgr.NewDirectory(appPath)

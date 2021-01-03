@@ -1,6 +1,7 @@
 package crafter
 
 import (
+	"github.com/kazekim/gocraft/architecture"
 	"github.com/kazekim/gocraft/models"
 	gstemplate "github.com/kazekim/gocraft/template"
 	"github.com/spf13/viper"
@@ -23,7 +24,7 @@ func (c *defaultCrafter) Craft() error {
 		return err
 	}
 
-	structure, err := c.convertProjectArchitecture(setting)
+	structure, err := architecture.ConvertProjectArchitecture(setting)
 	if err != nil {
 		return err
 	}
