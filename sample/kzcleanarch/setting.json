@@ -151,7 +151,9 @@
               "attributes": [
                 {
                   "name": "db",
-                  "template_type": "gorm.v2"
+                  "template_type": "gorm.v2",
+                  "is_pointer": true,
+                  "is_parameter": true
                 }
               ]
             },
@@ -187,6 +189,13 @@
                   "type": "string",
                   "is_parameter": true,
                   "is_add_getter": true
+                },
+                {
+                  "name": "db",
+                  "template_type": "gorm.v2",
+                  "is_parameter": true,
+                  "is_add_getter": true,
+                  "is_pointer": true
                 }
               ],
               "parameters": []

@@ -8,4 +8,5 @@ type Parameter struct {
 	IsUseCase    bool   `json:"is_use_case" mapstructure:"is_use_case"`
 	IsRepository bool   `json:"is_repository" mapstructure:"is_repository"`
 	IsEntity     bool   `json:"is_entity" mapstructure:"is_entity"`
+	IsPointer    bool   `json:"is_pointer" mapstructure:"is_pointer"`
 }

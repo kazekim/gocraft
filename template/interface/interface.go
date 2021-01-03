@@ -2,6 +2,7 @@ package interfacetemplate
 
 import (
 	"github.com/iancoleman/strcase"
+	typeconverter "github.com/kazekim/gocraft/converter/type"
 	"github.com/kazekim/gocraft/filemanager"
 	"github.com/kazekim/gocraft/models"
 	"text/template"
@@ -11,6 +12,7 @@ type Template struct {
 	path          string
 	PackageName   string
 	InterfaceName string
+	Imports       []string
 	Methods       []MethodTemplate
 }
 
@@ -20,15 +22,16 @@ type MethodTemplate struct {
 	ReturnParameters string
 }
 
-func NewTemplate(pkgName, interfaceName, path string, methods []models.Method) *Template {
+func NewTemplate(pkgName, interfaceName string, methods []models.Method, path string) *Template {
 
 	intfName := strcase.ToCamel(interfaceName)
 
-	ms := convertMethodTemplate(methods)
+	ms, ips := generateMethodTemplate(methods)
 
 	return &Template{
 		PackageName:   pkgName,
 		InterfaceName: intfName,
+		Imports:       ips,
 		Methods:       ms,
 		path:          path,
 	}
@@ -47,24 +50,27 @@ func (t *Template) GenerateFile(fileMgr *filemanager.FileManager) {
 	}
 }
 
-func convertMethodTemplate(ms []models.Method) []MethodTemplate {
+func generateMethodTemplate(ms []models.Method) ([]MethodTemplate, []string) {
 
 	var vs []MethodTemplate
+	var ips []string
 	for _, m := range ms {
 
 		params := ""
-		for i, ps := range m.Parameters {
+		for i, p := range m.Parameters {
 			if i > 0 {
 				params = params + ", "
 			}
-			params = params + ps.Name + " "
-			if ps.TemplateType != "" {
+			params = params + p.Name + " "
 
-			} else {
-				if ps.Package != "" {
-					params = params + ps.Package + "."
-				}
-				params = params + ps.Type
+			if p.IsPointer {
+				params += "*"
+			}
+
+			t, ip := typeconverter.FullParameterTypeNameWithImportPath(p)
+			params += t
+			if ip != "" {
+				ips = appendIfMissing(ips, ip)
 			}
 		}
 
@@ -72,17 +78,15 @@ func convertMethodTemplate(ms []models.Method) []MethodTemplate {
 		if len(m.ReturnParameters) > 1 {
 			retParams += "("
 		}
-		for i, ps := range m.ReturnParameters {
+		for i, p := range m.ReturnParameters {
 			if i > 0 {
 				retParams = retParams + ", "
 			}
-			if ps.TemplateType != "" {
 
-			} else {
-				if ps.Package != "" {
-					retParams = retParams + " " + ps.Package + "."
-				}
-				retParams = retParams + ps.Type
+			t, ip := typeconverter.FullParameterTypeNameWithImportPath(p)
+			retParams += t
+			if ip != "" {
+				ips = appendIfMissing(ips, ip)
 			}
 		}
 		if len(m.ReturnParameters) > 1 {
@@ -96,5 +100,14 @@ func convertMethodTemplate(ms []models.Method) []MethodTemplate {
 		}
 		vs = append(vs, v)
 	}
-	return vs
+	return vs, ips
+}
+
+func appendIfMissing(slice []string, val string) []string {
+	for _, ele := range slice {
+		if ele == val {
+			return slice
+		}
+	}
+	return append(slice, val)
 }

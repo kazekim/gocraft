@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	gcconverter "github.com/kazekim/gocraft/converter"
+	gcfactory "github.com/kazekim/gocraft/factory"
 	"github.com/kazekim/gocraft/models"
 	gomodtemplate "github.com/kazekim/gocraft/template/gomod"
 	"github.com/spf13/viper"
@@ -39,6 +40,8 @@ func (c *defaultCrafter) Craft() (err error) {
 		gmt := gomodtemplate.NewTemplate(setting.PackagePath, setting.ExternalTypes)
 		gmt.GenerateFile(c.fileMgr)
 	}
+
+	gcfactory.RegisterExternalTypeFactory(setting.ExternalTypes)
 
 	structure.Craft(c.fileMgr)
 

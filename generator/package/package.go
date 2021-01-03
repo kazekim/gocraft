@@ -6,6 +6,7 @@ import (
 	"github.com/kazekim/gocraft/generator"
 	"github.com/kazekim/gocraft/models"
 	enumtemplate "github.com/kazekim/gocraft/template/enum"
+	implementortemplate "github.com/kazekim/gocraft/template/implementor"
 	interfacetemplate "github.com/kazekim/gocraft/template/interface"
 	gcutils "github.com/kazekim/gocraft/utils"
 )
@@ -62,9 +63,12 @@ func (g *packageGenerator) GenerateFile(fileMgr *filemanager.FileManager) {
 		var ms []models.Method
 		if impl := intf.DefaultImplementor; impl != nil {
 			ms = append(ms, impl.AllMethods()...)
+
+			it := implementortemplate.NewTemplate(g.PackageName(), intf.Name, *impl, path)
+			it.GenerateFile(fileMgr)
 		}
 
-		et := interfacetemplate.NewTemplate(g.PackageName(), intf.Name, path, ms)
+		et := interfacetemplate.NewTemplate(g.PackageName(), intf.Name, ms, path)
 		et.GenerateFile(fileMgr)
 	}
 }
