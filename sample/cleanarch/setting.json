@@ -1,0 +1,241 @@
+{
+  "prefix": "KZ",
+  "sub_prefix": "CleanArch",
+  "enable_go_modules": true,
+  "architecture": "clean.v1",
+  "structure": {
+    "is_endpoints_use_prefix": true,
+    "is_use_cases_use_prefix": true,
+    "is_repositories_use_prefix": true,
+    "is_entities_use_prefix": true,
+    "end_points": {
+      "end_point_methods": [
+        {
+          "name": "login",
+          "path": "/login",
+          "registered_by": "e"
+        },
+        {
+          "name": "user_profile",
+          "path": "/user/profile",
+          "registered_by": "e"
+        },
+        {
+          "name": "news",
+          "path": "/news/:news_id",
+          "registered_by": "e"
+        }
+      ],
+      "implementors": [
+        {
+          "name": "default",
+          "attributes": [
+            {
+              "name": "cfg",
+              "type": "Config",
+              "is_entity": true
+            },
+            {
+              "name": "e",
+              "template_type": "echo.v4",
+              "is_parameter": true,
+              "is_pointer": true
+            },
+            {
+              "name": "default",
+              "is_parameter": true,
+              "is_use_case": true
+            },
+            {
+              "name": "security",
+              "is_parameter": true,
+              "is_use_case": true
+            }
+          ],
+          "parameters": [
+          ]
+        }
+      ]
+    },
+    "use_cases": [
+      {
+        "name": "kz",
+        "implementors": [
+          {
+            "name": "default",
+            "attributes": [
+              {
+                "name": "cfg",
+                "type": "Config",
+                "is_entity": true,
+                "is_parameter": true
+              },
+              {
+                "name": "db",
+                "is_parameter": true,
+                "is_repository": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "security",
+        "implementors": [
+          {
+            "name": "default",
+            "attributes": [
+              {
+                "name": "cfg",
+                "type": "Config",
+                "is_entity": true,
+                "is_parameter": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "repositories": [
+      {
+        "name": "kzdb",
+        "is_name_upper_case": true,
+        "implementors": [
+          {
+            "name": "default",
+            "attributes": [
+              {
+                "name": "cfg",
+                "type": "entities.Config",
+                "is_parameter": true
+              },
+              {
+                "name": "isMock",
+                "type": "bool",
+                "is_parameter": true
+              },
+              {
+                "name": "kzDBClient",
+                "type": "Client",
+                "package": "db"
+              }
+            ],
+            "parameters": [
+              {
+                "name": "logPrefix",
+                "type": "string"
+              },
+              {
+                "name": "db",
+                "is_pointer": true,
+                "template_type": "gorm.v2",
+                "is_parameter": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "packages": [
+      {
+        "name": "kzdb",
+        "path": "pkg/",
+        "is_enable_versioning": true,
+        "interfaces": [
+          {
+            "name": "client",
+            "implementors": {
+              "name": "default",
+              "attributes": [
+                {
+                  "name": "db",
+                  "template_type": "gorm.v2"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "kzerror",
+        "path": "pkg/",
+        "is_enable_versioning": false,
+        "enums": [
+          {
+            "name": "ErrorCode",
+            "type": "int"
+          }
+        ],
+        "interfaces": [
+          {
+            "name": "error",
+            "implementors": {
+              "attributes": [
+                {
+                  "name": "code",
+                  "type": "ErrorCode"
+                },
+                {
+                  "message": "message",
+                  "type": "string"
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "code",
+                  "type": "ErrorCode"
+                },
+                {
+                  "message": "message",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "name": "local",
+        "config_setting": {
+          "package": "viper",
+          "variables": [
+            {
+              "name": "httpPort",
+              "key": "HTTP_PORT",
+              "default": "9001",
+              "type": "string"
+            },
+            {
+              "name": "dbUsername",
+              "key": "DB_USERNAME",
+              "default": "kazekim",
+              "type": "string"
+            },
+            {
+              "name": "time_out",
+              "key": "TIME_OUT",
+              "default": "10",
+              "type": "float64"
+            }
+          ]
+        }
+      }
+    ],
+    "external_types": [
+      {
+        "name": "gorm.v2",
+        "type": "DB",
+        "package_name": "gorm",
+        "git_path":"gorm.io/gorm"
+      },
+      {
+        "name": "echo.v4",
+        "type": "Echo",
+        "package_name": "echo",
+        "git_path":"github.com/labstack/echo/v4"
+      }
+    ]
+  }
+}
