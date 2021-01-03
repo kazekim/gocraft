@@ -2,6 +2,8 @@ package cleanarch
 
 import (
 	"github.com/kazekim/gocraft/cleanarch/models/v1"
+	gcconstants "github.com/kazekim/gocraft/constants"
+	"github.com/kazekim/gocraft/filemanager"
 	"github.com/kazekim/gocraft/models"
 	gcstructure "github.com/kazekim/gocraft/structure"
 )
@@ -22,6 +24,12 @@ func NewStructureV1(model cleanarchmodels.CleanArchitecture, prefix, pkgName str
 	}
 }
 
-func (s *CleanArchitectureStructureV1) Craft() error {
+func (s *CleanArchitectureStructureV1) Craft(fileMgr *filemanager.FileManager) error {
+
+	fileMgr.NewDirectory(gcconstants.DirectoryNameEndPoints)
+	fileMgr.NewDirectory(gcconstants.DirectoryNameUseCases)
+	fileMgr.NewDirectory(gcconstants.DirectoryNameRepositories)
+	fileMgr.NewDirectory(gcconstants.DirectoryNameEntities)
+
 	return nil
 }

@@ -1,8 +1,9 @@
 package gstemplate
 
 import (
+	gcconstants "github.com/kazekim/gocraft/constants"
+	"github.com/kazekim/gocraft/filemanager"
 	"github.com/kazekim/gocraft/models"
-	"os"
 	"text/template"
 )
 
@@ -50,16 +51,14 @@ func NewGoModTemplate(pkgPath string, exTypes []models.ExternalType) *GoModTempl
 	}
 }
 
-func (t *GoModTemplate) GenerateFile(path string) error {
-	f, err := os.Create(path + "/go.mod")
-	if err != nil {
-		return err
-	}
+func (t *GoModTemplate) GenerateFile(fileMgr *filemanager.FileManager) error {
+
+	f := fileMgr.NewFile(gcconstants.FileNameGoMod)
 	defer f.Close()
 
 	gmTemplate := template.Must(template.New("").Parse(goModTemplateStructure))
 
-	err = gmTemplate.Execute(f, t)
+	err := gmTemplate.Execute(f, t)
 	return err
 }
 

@@ -30,13 +30,13 @@ func (c *defaultCrafter) Craft() error {
 
 	if setting.IsEnableGoModules {
 		gmt := gstemplate.NewGoModTemplate(setting.PackagePath, setting.ExternalTypes)
-		err := gmt.GenerateFile(c.cfgPath)
+		err := gmt.GenerateFile(c.fileMgr)
 		if err != nil {
 			return err
 		}
 	}
 
-	err = structure.Craft()
+	err = structure.Craft(c.fileMgr)
 	if err != nil {
 		return err
 	}

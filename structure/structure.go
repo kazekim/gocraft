@@ -1,5 +1,7 @@
 package gcstructure
 
+import "github.com/kazekim/gocraft/filemanager"
+
 type Structure interface {
-	Craft() error
+	Craft(fileMgr *filemanager.FileManager) error
 }
