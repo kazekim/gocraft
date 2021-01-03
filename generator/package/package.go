@@ -1,8 +1,9 @@
-package gcgenerator
+package packagegenerator
 
 import (
 	gcconstants "github.com/kazekim/gocraft/constants"
 	"github.com/kazekim/gocraft/filemanager"
+	"github.com/kazekim/gocraft/generator"
 	"github.com/kazekim/gocraft/models"
 	enumtemplate "github.com/kazekim/gocraft/template/enum"
 	interfacetemplate "github.com/kazekim/gocraft/template/interface"
@@ -14,7 +15,7 @@ type packageGenerator struct {
 	prefix string
 }
 
-func NewPackageGenerator(pkg models.Package, prefix string) Generator {
+func New(pkg models.Package, prefix string) gcgenerator.Generator {
 	return &packageGenerator{
 		pkg:    pkg,
 		prefix: prefix,

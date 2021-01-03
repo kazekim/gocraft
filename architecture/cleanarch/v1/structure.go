@@ -4,7 +4,7 @@ import (
 	"github.com/kazekim/gocraft/architecture/cleanarch/v1/models/v1"
 	gcconstants "github.com/kazekim/gocraft/constants"
 	"github.com/kazekim/gocraft/filemanager"
-	gcgenerator "github.com/kazekim/gocraft/generator"
+	packagegenerator "github.com/kazekim/gocraft/generator/package"
 	"github.com/kazekim/gocraft/models"
 	gcstructure "github.com/kazekim/gocraft/structure"
 	"github.com/mitchellh/mapstructure"
@@ -46,7 +46,7 @@ func (s *Structure) Craft(fileMgr *filemanager.FileManager) {
 	fileMgr.NewDirectory(gcconstants.DirectoryNameCommand)
 
 	for _, p := range s.model.Packages {
-		g := gcgenerator.NewPackageGenerator(p, s.prefix)
+		g := packagegenerator.New(p, s.prefix)
 		g.GenerateFile(fileMgr)
 	}
 }
