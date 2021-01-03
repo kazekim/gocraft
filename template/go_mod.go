@@ -7,9 +7,8 @@ import (
 )
 
 type GoModTemplate struct {
-	ProjectPath      string
-	ProjectName      string
-	RequiredPacakges []GoModRequiredPackage
+	PackagePath      string
+	RequiredPackages []GoModRequiredPackage
 	ReplacedPackage  []GoModReplacedPackage
 }
 
@@ -24,7 +23,7 @@ type GoModReplacedPackage struct {
 	ReplacePath string
 }
 
-func NewGoModTemplate(prjName, prjPath string, exTypes []models.ExternalType) *GoModTemplate {
+func NewGoModTemplate(pkgPath string, exTypes []models.ExternalType) *GoModTemplate {
 
 	reqPkgs := make([]GoModRequiredPackage, 0)
 	repPkgs := make([]GoModReplacedPackage, 0)
@@ -45,9 +44,8 @@ func NewGoModTemplate(prjName, prjPath string, exTypes []models.ExternalType) *G
 		}
 	}
 	return &GoModTemplate{
-		ProjectName:      prjName,
-		ProjectPath:      prjPath,
-		RequiredPacakges: reqPkgs,
+		PackagePath:      pkgPath,
+		RequiredPackages: reqPkgs,
 		ReplacedPackage:  repPkgs,
 	}
 }
@@ -65,12 +63,12 @@ func (t *GoModTemplate) GenerateFile(path string) error {
 	return err
 }
 
-const goModTemplateStructure = `module {{.ProjectPath}}{{.ProjectName}}
+const goModTemplateStructure = `module {{.PackagePath}}
 
 go 1.15
 
 require (
-	{{- range .RequiredPacakges }}
+	{{- range .RequiredPackages }}
 		{{.Path}} {{.Version}}
 	{{- end }}
 )

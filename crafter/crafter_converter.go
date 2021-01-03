@@ -18,7 +18,7 @@ func (c *defaultCrafter) convertProjectArchitecture(s models.GoCraft) (gcstructu
 		if err != nil {
 			return nil, err
 		}
-		return cleanarch.NewStructureV1(m, s.Prefix, s.SubPrefix, s.ExternalTypes), nil
+		return cleanarch.NewStructureV1(m, s.Prefix, s.PackageName, s.ExternalTypes), nil
 	default:
 		return nil, errors.New("invalid architecture")
 	}

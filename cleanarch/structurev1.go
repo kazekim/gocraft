@@ -9,15 +9,15 @@ import (
 type CleanArchitectureStructureV1 struct {
 	model         cleanarchmodels.CleanArchitecture
 	prefix        string
-	subPrefix     string
+	pkgName       string
 	externalTypes []models.ExternalType
 }
 
-func NewStructureV1(model cleanarchmodels.CleanArchitecture, prefix, subPrefix string, externalTypes []models.ExternalType) gcstructure.Structure {
+func NewStructureV1(model cleanarchmodels.CleanArchitecture, prefix, pkgName string, externalTypes []models.ExternalType) gcstructure.Structure {
 	return &CleanArchitectureStructureV1{
 		model:         model,
 		prefix:        prefix,
-		subPrefix:     subPrefix,
+		pkgName:       pkgName,
 		externalTypes: externalTypes,
 	}
 }

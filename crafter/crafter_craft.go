@@ -29,7 +29,7 @@ func (c *defaultCrafter) Craft() error {
 	}
 
 	if setting.IsEnableGoModules {
-		gmt := gstemplate.NewGoModTemplate("cleanarch", "github.com/kazekim/gocraft/sample/", setting.ExternalTypes)
+		gmt := gstemplate.NewGoModTemplate(setting.PackagePath, setting.ExternalTypes)
 		err := gmt.GenerateFile("sample/cleanarch")
 		if err != nil {
 			return err
