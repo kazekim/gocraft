@@ -1,4 +1,4 @@
-package gomod
+package gomodtemplate
 
 const templateStructure = `module {{.PackagePath}}
 

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	gcconverter "github.com/kazekim/gocraft/converter"
 	"github.com/kazekim/gocraft/models"
-	"github.com/kazekim/gocraft/template/gomod"
+	gomodtemplate "github.com/kazekim/gocraft/template/gomod"
 	"github.com/spf13/viper"
 )
 
@@ -36,7 +36,7 @@ func (c *defaultCrafter) Craft() (err error) {
 
 	structure := gcconverter.ConvertProjectArchitecture(setting)
 	if setting.IsEnableGoModules {
-		gmt := gomod.NewTemplate(setting.PackagePath, setting.ExternalTypes)
+		gmt := gomodtemplate.NewTemplate(setting.PackagePath, setting.ExternalTypes)
 		gmt.GenerateFile(c.fileMgr)
 	}
 

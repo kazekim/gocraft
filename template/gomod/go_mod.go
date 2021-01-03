@@ -1,4 +1,4 @@
-package gomod
+package gomodtemplate
 
 import (
 	gcconstants "github.com/kazekim/gocraft/constants"

@@ -5,6 +5,7 @@ import (
 	"github.com/kazekim/gocraft/filemanager"
 	"github.com/kazekim/gocraft/models"
 	enumtemplate "github.com/kazekim/gocraft/template/enum"
+	interfacetemplate "github.com/kazekim/gocraft/template/interface"
 	gcutils "github.com/kazekim/gocraft/utils"
 )
 
@@ -52,6 +53,11 @@ func (g *packageGenerator) GenerateFile(fileMgr *filemanager.FileManager) {
 
 	for _, enum := range g.pkg.Enums {
 		et := enumtemplate.NewTemplate(g.PackageName(), enum.Name, enum.Type, path)
+		et.GenerateFile(fileMgr)
+	}
+
+	for _, intf := range g.pkg.Interfaces {
+		et := interfacetemplate.NewTemplate(g.PackageName(), intf.Name, path)
 		et.GenerateFile(fileMgr)
 	}
 }
