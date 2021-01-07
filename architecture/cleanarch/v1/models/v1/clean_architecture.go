@@ -11,4 +11,5 @@ type CleanArchitecture struct {
 	UseCases                []models.UseCase    `json:"use_cases" mapstructure:"use_cases"`
 	Repositories            []models.Repository `json:"repositories" mapstructure:"repositories"`
 	Commands                []models.Command    `json:"commands" mapstructure:"commands"`
+	Packages                []models.Package    `json:"packages" mapstructure:"packages"`
 }

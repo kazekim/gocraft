@@ -140,28 +140,31 @@
     "packages": [
       {
         "name": "db",
-        "is_add_prefix": "is_add_prefix",
-        "path": "pkg/",
+        "type": "internal",
+        "is_add_prefix": true,
         "is_enable_versioning": true,
         "interfaces": [
           {
             "name": "client",
-            "implementors": {
+            "default_implementor": {
               "name": "default",
               "attributes": [
                 {
                   "name": "db",
-                  "template_type": "gorm.v2"
+                  "template_type": "gorm.v2",
+                  "is_pointer": true,
+                  "is_parameter": true
                 }
               ]
-            }
+            },
+            "implementors": []
           }
         ]
       },
       {
         "name": "error",
-        "is_add_prefix": "is_add_prefix",
-        "path": "pkg/",
+        "type": "internal",
+        "is_add_prefix": true,
         "is_enable_versioning": false,
         "enums": [
           {
@@ -172,29 +175,25 @@
         "interfaces": [
           {
             "name": "error",
-            "implementors": {
+            "default_implementor": {
               "name": "default",
               "attributes": [
                 {
                   "name": "code",
-                  "type": "ErrorCode"
+                  "type": "ErrorCode",
+                  "is_parameter": true,
+                  "is_add_getter": true
                 },
                 {
-                  "message": "message",
-                  "type": "string"
+                  "name": "message",
+                  "type": "string",
+                  "is_parameter": true,
+                  "is_add_getter": true
                 }
               ],
-              "parameters": [
-                {
-                  "name": "code",
-                  "type": "ErrorCode"
-                },
-                {
-                  "message": "message",
-                  "type": "string"
-                }
-              ]
-            }
+              "parameters": []
+            },
+            "implementors": []
           }
         ]
       }
