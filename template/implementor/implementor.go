@@ -19,15 +19,7 @@ type Template struct {
 	Attributes         []string
 	NewFuncParameters  string
 	VariableParameters []string
-	Methods            []MethodTemplate
-}
-
-type MethodTemplate struct {
-	Name             string
-	Parameters       string
-	ReturnParameters string
-	Body             string
-	ReturnValues     string
+	Methods            []models.Method
 }
 
 func NewTemplate(pkgName, interfaceName string, impl models.Implementor, path string) *Template {
@@ -45,8 +37,6 @@ func NewTemplate(pkgName, interfaceName string, impl models.Implementor, path st
 	nfpStr := strings.Join(newFuncParams, ",")
 	imports = appendIfMissing(imports, ips...)
 
-	//ms := convertMethodTemplate(methods)
-
 	return &Template{
 		PackageName:        pkgName,
 		InterfaceName:      intfName,
@@ -57,6 +47,7 @@ func NewTemplate(pkgName, interfaceName string, impl models.Implementor, path st
 		Attributes:         attrs,
 		Imports:            imports,
 		path:               path,
+		Methods:            impl.Methods,
 	}
 }
 
@@ -69,12 +60,14 @@ func (t *Template) GenerateFile(fileMgr *filemanager.FileManager) {
 	f := fileMgr.NewGoFileWithPath(t.path, strcase.ToSnake(t.ImplementorName))
 	defer f.Close()
 
-	gmTemplate := template.Must(template.New("").Parse(templateStructure))
+	gmTemplate := template.Must(template.New("").Parse(implementorTemplateStructure))
 
 	err := gmTemplate.Execute(f, t)
 	if err != nil {
 		panic(err)
 	}
+
+	generateImplementorMethodTemplates(t.PackageName, t.ImplementorName, t.Methods, t.path, fileMgr)
 }
 
 func createAttributeTemplates(as []models.Attribute) ([]string, []string) {

@@ -188,7 +188,8 @@
                   "name": "message",
                   "type": "string",
                   "is_parameter": true,
-                  "is_add_getter": true
+                  "is_add_getter": true,
+                  "is_add_setter": true
                 }
               ],
               "parameters": []

@@ -2,9 +2,9 @@ package interfacetemplate
 
 import (
 	"github.com/iancoleman/strcase"
-	typeconverter "github.com/kazekim/gocraft/converter/type"
 	"github.com/kazekim/gocraft/filemanager"
 	"github.com/kazekim/gocraft/models"
+	methodtemplate "github.com/kazekim/gocraft/template/method"
 	"text/template"
 )
 
@@ -13,20 +13,14 @@ type Template struct {
 	PackageName   string
 	InterfaceName string
 	Imports       []string
-	Methods       []MethodTemplate
-}
-
-type MethodTemplate struct {
-	Name             string
-	Parameters       string
-	ReturnParameters string
+	Methods       []methodtemplate.MethodTemplate
 }
 
 func NewTemplate(pkgName, interfaceName string, methods []models.Method, path string) *Template {
 
 	intfName := strcase.ToCamel(interfaceName)
 
-	ms, ips := generateMethodTemplate(methods)
+	ms, ips := methodtemplate.ConvertMethodTemplate(methods)
 
 	return &Template{
 		PackageName:   pkgName,
@@ -48,66 +42,4 @@ func (t *Template) GenerateFile(fileMgr *filemanager.FileManager) {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func generateMethodTemplate(ms []models.Method) ([]MethodTemplate, []string) {
-
-	var vs []MethodTemplate
-	var ips []string
-	for _, m := range ms {
-
-		params := ""
-		for i, p := range m.Parameters {
-			if i > 0 {
-				params = params + ", "
-			}
-			params = params + p.Name + " "
-
-			if p.IsPointer {
-				params += "*"
-			}
-
-			t, ip := typeconverter.FullParameterTypeNameWithImportPath(p)
-			params += t
-			if ip != "" {
-				ips = appendIfMissing(ips, ip)
-			}
-		}
-
-		retParams := ""
-		if len(m.ReturnParameters) > 1 {
-			retParams += "("
-		}
-		for i, p := range m.ReturnParameters {
-			if i > 0 {
-				retParams = retParams + ", "
-			}
-
-			t, ip := typeconverter.FullParameterTypeNameWithImportPath(p)
-			retParams += t
-			if ip != "" {
-				ips = appendIfMissing(ips, ip)
-			}
-		}
-		if len(m.ReturnParameters) > 1 {
-			retParams += ")"
-		}
-
-		v := MethodTemplate{
-			Name:             m.Name,
-			Parameters:       params,
-			ReturnParameters: retParams,
-		}
-		vs = append(vs, v)
-	}
-	return vs, ips
-}
-
-func appendIfMissing(slice []string, val string) []string {
-	for _, ele := range slice {
-		if ele == val {
-			return slice
-		}
-	}
-	return append(slice, val)
 }
