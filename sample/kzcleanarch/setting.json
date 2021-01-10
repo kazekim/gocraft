@@ -192,7 +192,17 @@
                   "is_add_setter": true
                 }
               ],
-              "parameters": []
+              "parameters": [],
+              "methods": [
+                {
+                  "name": "Error",
+                  "return_parameters": [
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              ]
             },
             "implementors": []
           }

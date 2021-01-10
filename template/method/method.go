@@ -79,7 +79,8 @@ func ConvertMethodTemplate(ms []models.Method) ([]MethodTemplate, []string) {
 		}
 
 		if body == "" {
-			body = "\tpanic(\"implement me!\")"
+			body = "\t//TODO: add " + m.Name + " method body\n" +
+				"\tpanic(\"implement me!\")"
 		}
 
 		v := MethodTemplate{
