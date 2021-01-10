@@ -102,6 +102,8 @@ github.com/jtolds/gls v4.20.0+incompatible/go.mod h1:QJZ7F/aHp+rZTRtaJ1ow/lLfFfV
 github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
 github.com/kazekim/gocraft v0.0.0-20210103093408-8eadc5888b90 h1:Z0hZJHEWd7tcgxy3GiMYu0GwxX9BUfIVsRC7AOHaY6Y=
 github.com/kazekim/gocraft v0.0.0-20210103093408-8eadc5888b90/go.mod h1:1BjWZIC/m7sSSYrjNV0mvTJa4yccCgmPU4UvyJgL7ic=
+github.com/kazekim/gocraft v0.0.0-20210107083811-a64220a5ea9e h1:g+/OF07/xnsKlB26ohXxP9+X0N4xSt0K/fNZRcsTMUY=
+github.com/kazekim/gocraft v0.0.0-20210107083811-a64220a5ea9e/go.mod h1:QMIEBHB4R4Fl/3ugbabgzYqKafYHZ3IOZlnsJKTbAAw=
 github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvWXihfKN4Q=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=

@@ -44,6 +44,7 @@ func (a *Attribute) AllMethods() []Method {
 			Parameters: []Parameter{
 				parameter,
 			},
+			IsSetter: true,
 		}
 		methods = append(methods, m)
 	}
@@ -54,6 +55,7 @@ func (a *Attribute) AllMethods() []Method {
 			ReturnParameters: []Parameter{
 				parameter,
 			},
+			IsGetter: true,
 		}
 		methods = append(methods, m)
 	}

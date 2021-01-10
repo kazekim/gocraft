@@ -1,6 +1,6 @@
 package implementortemplate
 
-const templateStructure = `package {{.PackageName}}
+const implementorTemplateStructure = `package {{.PackageName}}
 {{ if gt (len .Imports) 0 }}
 import({{range $val := .Imports}}
 	"{{$val}}"{{ end }}

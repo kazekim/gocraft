@@ -1,8 +1,8 @@
-package implementortemplate
+package modeltemplate
 
 import (
 	"github.com/iancoleman/strcase"
-	"github.com/kazekim/gocraft/converter/type"
+	typeconverter "github.com/kazekim/gocraft/converter/type"
 	"github.com/kazekim/gocraft/filemanager"
 	"github.com/kazekim/gocraft/models"
 	"strings"
@@ -12,8 +12,7 @@ import (
 type Template struct {
 	path               string
 	PackageName        string
-	InterfaceName      string
-	ImplementorName    string
+	ModelName          string
 	NewFuncName        string
 	Imports            []string
 	Attributes         []string
@@ -22,52 +21,46 @@ type Template struct {
 	Methods            []models.Method
 }
 
-func NewTemplate(pkgName, interfaceName string, impl models.Implementor, path string) *Template {
+func NewTemplate(pkgName string, m models.Model, path string) *Template {
 
-	intfName := strcase.ToCamel(interfaceName)
-	implName := strcase.ToLowerCamel(impl.Name) + intfName
-	newFuncName := implName
+	modelName := strcase.ToCamel(m.Name)
+	newFuncName := modelName
 
 	var imports []string
 
-	attrs, ips := createAttributeTemplates(impl.Attributes)
+	attrs, ips := createAttributeTemplates(m.Attributes)
 	imports = appendIfMissing(imports, ips...)
 
-	newFuncParams, variableParams, ips := createParametersTemplates(impl.AllParameters())
+	newFuncParams, variableParams, ips := createParametersTemplates(m.AllParameters())
 	nfpStr := strings.Join(newFuncParams, ", ")
 	imports = appendIfMissing(imports, ips...)
 
 	return &Template{
 		PackageName:        pkgName,
-		InterfaceName:      intfName,
-		ImplementorName:    implName,
+		ModelName:          modelName,
 		NewFuncName:        newFuncName,
 		NewFuncParameters:  nfpStr,
 		VariableParameters: variableParams,
 		Attributes:         attrs,
 		Imports:            imports,
 		path:               path,
-		Methods:            impl.Methods,
+		Methods:            m.Methods,
 	}
-}
-
-func (t *Template) SetNewFuncName(name string) {
-	t.NewFuncName = strcase.ToCamel(name)
 }
 
 func (t *Template) GenerateFile(fileMgr *filemanager.FileManager) {
 
-	f := fileMgr.NewGoFileWithPath(t.path, strcase.ToSnake(t.ImplementorName))
+	f := fileMgr.NewGoFileWithPath(t.path, strcase.ToSnake(t.ModelName))
 	defer f.Close()
 
-	gmTemplate := template.Must(template.New("").Parse(implementorTemplateStructure))
+	gmTemplate := template.Must(template.New("").Parse(templateStructure))
 
 	err := gmTemplate.Execute(f, t)
 	if err != nil {
 		panic(err)
 	}
 
-	generateImplementorMethodTemplates(t.PackageName, t.ImplementorName, t.Methods, t.path, fileMgr)
+	generateModelMethodTemplates(t.PackageName, t.ModelName, t.Methods, t.path, fileMgr)
 }
 
 func createAttributeTemplates(as []models.Attribute) ([]string, []string) {
@@ -94,8 +87,8 @@ func createParametersTemplates(ps []models.Parameter) ([]string, []string, []str
 	var ips []string
 
 	for _, p := range ps {
-		param := p.Name + " "
-		vParam := p.Name + ": " + p.Name
+		param := strcase.ToLowerCamel(p.Name) + " "
+		vParam := p.Name + ": " + strcase.ToLowerCamel(p.Name)
 
 		t, ip := typeconverter.FullParameterTypeNameWithImportPath(p)
 		param += t

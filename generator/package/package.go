@@ -63,6 +63,7 @@ func (g *packageGenerator) GenerateFile(fileMgr *filemanager.FileManager) {
 		var ms []models.Method
 		if impl := intf.DefaultImplementor; impl != nil {
 			ms = append(ms, impl.AllMethods()...)
+			impl.Methods = impl.AllMethods()
 
 			it := implementortemplate.NewTemplate(g.PackageName(), intf.Name, *impl, path)
 			it.SetNewFuncName(intf.Name)
