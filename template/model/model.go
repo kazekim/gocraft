@@ -18,6 +18,7 @@ type Template struct {
 	Attributes         []string
 	NewFuncParameters  string
 	VariableParameters []string
+	HasConstructor     bool
 	Methods            []models.Method
 }
 
@@ -43,6 +44,7 @@ func NewTemplate(pkgName string, m models.Model, path string) *Template {
 		VariableParameters: variableParams,
 		Attributes:         attrs,
 		Imports:            imports,
+		HasConstructor:     m.HasConstructor,
 		path:               path,
 		Methods:            m.Methods,
 	}

@@ -10,10 +10,11 @@ type {{.ModelName}} struct { {{range $attr := .Attributes}}
 	{{ $attr }}
 {{- end }}
 }
-
+{{ if .HasConstructor }}
 func New{{.NewFuncName}}({{.NewFuncParameters}}) *{{.ModelName}} {
 	return &{{.ModelName}}{ {{range $val := .VariableParameters}}
 		{{$val}},{{ end }}
 	}
 }
+{{ end }}
 `
