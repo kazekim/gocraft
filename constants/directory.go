@@ -5,7 +5,7 @@ const (
 	DirectoryNameUseCases     = "usecases"
 	DirectoryNameEndPoints    = "endpoints"
 	DirectoryNameRepositories = "repositories"
-	DirectoryNameEntities     = "entities"
+	DirectoryNameModels       = "entities"
 	DirectoryNamePackages     = "pkg"
 	DirectoryNameInternal     = "internal"
 	DirectoryNameCommand      = "cmd"

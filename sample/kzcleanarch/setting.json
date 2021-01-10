@@ -8,7 +8,7 @@
     "is_endpoints_use_prefix": true,
     "is_use_cases_use_prefix": true,
     "is_repositories_use_prefix": true,
-    "is_entities_use_prefix": true,
+    "is_models_use_prefix": true,
     "end_points": {
       "end_point_methods": [
         {
@@ -107,7 +107,7 @@
             "attributes": [
               {
                 "name": "cfg",
-                "type": "entities.Config",
+                "type": "models.Config",
                 "is_parameter": true
               },
               {
@@ -135,6 +135,29 @@
             ]
           }
         ]
+      }
+    ],
+    "models": [
+      {
+        "name": "Config",
+        "attributes": [
+          {
+            "name": "UrlMonitorAPI",
+            "type": "string",
+            "is_parameter":true
+          },
+          {
+            "name": "ServerName",
+            "type": "string",
+            "is_parameter":true
+          },
+          {
+            "name": "APITimeOutSeconds",
+            "type": "float64",
+            "is_parameter":true
+          }
+        ],
+        "has_constructor": true
       }
     ],
     "packages": [
