@@ -47,7 +47,7 @@ func (t *ImplementorMethodTemplate) GenerateFile(fileMgr *filemanager.FileManage
 	f := fileMgr.NewGoFileWithPath(t.path, fileName)
 	defer f.Close()
 
-	t.Method.Body = strings.Replace(t.Method.Body, methodtemplate.VariableNameConst, t.ImplementorVariableName, -1)
+	t.Method.Body = strings.Replace(t.Method.Body, methodtemplate.VariableName, t.ImplementorVariableName, -1)
 	gmTemplate := template.Must(template.New("").Parse(implementorMethodTemplateStructure))
 
 	err := gmTemplate.Execute(f, t)

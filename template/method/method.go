@@ -2,11 +2,12 @@ package methodtemplate
 
 import (
 	typeconverter "github.com/kazekim/gocraft/converter/type"
+	"github.com/kazekim/gocraft/methodbodytemplate"
 	"github.com/kazekim/gocraft/models"
 )
 
 const (
-	VariableNameConst = "::VARCONST::"
+	VariableName = "::VAR::"
 )
 
 type MethodTemplate struct {
@@ -38,7 +39,7 @@ func ConvertMethodTemplate(ms []models.Method) ([]MethodTemplate, []string) {
 			}
 
 			if m.IsSetter {
-				body += "\t" + VariableNameConst + "." + p.Name + " = " + p.Name + "\n"
+				body += "\t" + VariableName + "." + p.Name + " = " + p.Name + "\n"
 			}
 
 			t, ip := typeconverter.FullParameterTypeNameWithImportPath(p)
@@ -71,11 +72,20 @@ func ConvertMethodTemplate(ms []models.Method) ([]MethodTemplate, []string) {
 			}
 
 			if m.IsGetter {
-				body += VariableNameConst + `.` + p.Name
+				body += VariableName + `.` + p.Name
 			}
 		}
 		if len(m.ReturnParameters) > 1 {
 			retParams += ")"
+		}
+
+		if m.BodyTemplate != "" {
+			bt, err := methodbodytemplate.Load(m.BodyTemplate)
+			if err != nil {
+				panic(err)
+			}
+			mips = appendIfMissing(mips, bt.Imports...)
+			body = bt.Body
 		}
 
 		if body == "" {
@@ -95,11 +105,21 @@ func ConvertMethodTemplate(ms []models.Method) ([]MethodTemplate, []string) {
 	return vs, ips
 }
 
-func appendIfMissing(slice []string, val string) []string {
-	for _, ele := range slice {
-		if ele == val {
-			return slice
+func appendIfMissing(slice []string, vals ...string) []string {
+
+	var s []string
+	for _, val := range vals {
+		isFound := false
+		for _, ele := range slice {
+			if ele == val {
+				isFound = true
+				break
+			}
+		}
+		if !isFound {
+			s = append(s, val)
 		}
 	}
-	return append(slice, val)
+
+	return s
 }

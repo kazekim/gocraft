@@ -200,7 +200,8 @@
                     {
                       "type": "string"
                     }
-                  ]
+                  ],
+                  "body_template": "return_parameters_string"
                 }
               ]
             },
